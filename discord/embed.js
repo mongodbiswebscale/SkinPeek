@@ -127,7 +127,7 @@ export const renderOffers = async (shop, interaction, valorantUser, VPemoji, oth
 
     for(const uuid of shop.offers) {
         const skin = await getSkin(uuid);
-        const price = isDefaultSkin(skin) ? "0" : skin.price; // force render price for defaults
+        const price = isDefaultSkin(skin) ? "0" : getPriceFromFullOffers(uuid, shop.fullOffers); // force render price for defaults
         const embed = await skinEmbed(skin.uuid, price, interaction, VPemoji);
         embeds.push(embed);
     }
@@ -1410,4 +1410,14 @@ const createProgressBar = (totalxpneeded, currentxp, level) => {
     const bar = line.repeat(filledBars) + circle + line.repeat(emptyBars);
 
     return level + '┃' + bar + '┃' + (parseInt(level) + 1);
+}
+
+const getPriceFromFullOffers = (uuid, fullOffers) => {
+    const offer = fullOffers.find(offer => offer.OfferID === uuid);
+    if (offer != null) {
+        let keys = Object.keys(offer.Cost);
+        if (keys.length < 1) return "0";
+        return offer.Cost[keys[0]].toLocaleString("en-US");
+    }
+    return "0";
 }

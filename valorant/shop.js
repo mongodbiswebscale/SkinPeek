@@ -74,6 +74,7 @@ export const getOffers = async (id, account = null) => {
     return await easterEggOffers(id, account, {
         success: true,
         offers: resp.shop.SkinsPanelLayout.SingleItemOffers,
+        fullOffers: resp.shop.SkinsPanelLayout.SingleItemStoreOffers,
         expires: Math.floor(Date.now() / 1000) + resp.shop.SkinsPanelLayout.SingleItemOffersRemainingDurationInSeconds,
         accessory: {
             offers: (resp.shop.AccessoryStore.AccessoryStoreOffers || []).map(rawAccessory => {
@@ -229,6 +230,7 @@ const addShopCache = (puuid, shopJson) => {
     const shopCache = {
         offers: {
             offers: shopJson.SkinsPanelLayout.SingleItemOffers,
+            fullOffers: shopJson.SkinsPanelLayout.SingleItemStoreOffers,
             expires: Math.floor(now / 1000) + shopJson.SkinsPanelLayout.SingleItemOffersRemainingDurationInSeconds,
             accessory: {
                 offers: (shopJson.AccessoryStore.AccessoryStoreOffers || []).map(rawAccessory => {
